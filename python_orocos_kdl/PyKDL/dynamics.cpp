@@ -86,7 +86,7 @@ void init_dynamics(pybind11::module &m)
     // ChainDynParam
     // --------------------
     py::class_<ChainDynParam> chain_dyn_param(m, "ChainDynParam");
-    chain_dyn_param.def(py::init<const Chain&, Vector>());
+    chain_dyn_param.def(py::init<const Chain&, Vector>(), py::keep_alive<1, 2>());
     chain_dyn_param.def("JntToCoriolis", &ChainDynParam::JntToCoriolis, py::arg("q"), py::arg("q_dot"), py::arg("coriolis"));
     chain_dyn_param.def("JntToMass", &ChainDynParam::JntToMass, py::arg("q"), py::arg("H"));
     chain_dyn_param.def("JntToGravity", &ChainDynParam::JntToGravity, py::arg("q"), py::arg("gravity"));

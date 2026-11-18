@@ -1,0 +1,43 @@
+name: Free-threaded PyKDL
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python 3.15t on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: 2
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15t'
+      - name: Install build and test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libeigen3-dev libcppunit-dev
+          python -m pip install cmake pybind11 psutil future
+      - name: Build and test KDL
+        run: |
+          cmake -S orocos_kdl -B build/kdl -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$RUNNER_TEMP/kdl"
+          cmake --build build/kdl
+          cmake --build build/kdl --target check
+          cmake --install build/kdl
+      - name: Build and test PyKDL
+        run: |
+          cmake -S python_orocos_kdl -B build/python \
+            -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$RUNNER_TEMP/kdl" \
+            -DPython3_EXECUTABLE="$(command -v python)" -Dpybind11_DIR="$(python -m pybind11 --cmakedir)"
+          cmake --build build/python
+          export LD_LIBRARY_PATH="$RUNNER_TEMP/kdl/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export PYTHONPATH="$PWD/build/python"
+          python python_orocos_kdl/tests/threadingtest.py
+          python python_orocos_kdl/tests/PyKDLtest.py

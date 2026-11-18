@@ -29,7 +29,14 @@
 namespace py = pybind11;
 
 
+#ifdef Py_GIL_DISABLED
+#  if PYBIND11_VERSION_HEX < 0x020D0000
+#    error "Free-threaded PyKDL requires pybind11 2.13 or newer"
+#  endif
+PYBIND11_MODULE(PyKDL, m, py::mod_gil_not_used())
+#else
 PYBIND11_MODULE(PyKDL, m)
+#endif
 {
     m.doc() = "Orocos KDL Python wrapper"; // optional module docstring
     m.attr("__version__") = KDL_VERSION_STRING;

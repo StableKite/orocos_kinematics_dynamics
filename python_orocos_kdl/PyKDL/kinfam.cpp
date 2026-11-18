@@ -375,14 +375,14 @@ void init_kinfam(pybind11::module &m)
     // ChainFkSolverPos_recursive
     // ------------------------------
     py::class_<ChainFkSolverPos_recursive, ChainFkSolverPos> chain_fk_solver_pos_recursive(m, "ChainFkSolverPos_recursive");
-    chain_fk_solver_pos_recursive.def(py::init<const Chain&>(), py::arg("chain"));
+    chain_fk_solver_pos_recursive.def(py::init<const Chain&>(), py::arg("chain"), py::keep_alive<1, 2>());
 
 
     // ------------------------------
     // ChainFkSolverVel_recursive
     // ------------------------------
     py::class_<ChainFkSolverVel_recursive, ChainFkSolverVel> chain_fk_solver_vel_recursive(m, "ChainFkSolverVel_recursive");
-    chain_fk_solver_vel_recursive.def(py::init<const Chain&>(), py::arg("chain"));
+    chain_fk_solver_vel_recursive.def(py::init<const Chain&>(), py::arg("chain"), py::keep_alive<1, 2>());
 
 
     // --------------------
@@ -410,7 +410,8 @@ void init_kinfam(pybind11::module &m)
     py::class_<ChainIkSolverPos_NR, ChainIkSolverPos> chain_ik_solver_pos_NR(m, "ChainIkSolverPos_NR");
     chain_ik_solver_pos_NR.def(py::init<const Chain&, ChainFkSolverPos&, ChainIkSolverVel&, unsigned int, double>(),
                                py::arg("chain"), py::arg("fksolver"), py::arg("iksolver"),
-                               py::arg("maxiter")=100, py::arg("eps")=epsilon);
+                               py::arg("maxiter")=100, py::arg("eps")=epsilon,
+                               py::keep_alive<1, 2>(), py::keep_alive<1, 3>(), py::keep_alive<1, 4>());
 
 
     // ---------------------------
@@ -420,7 +421,8 @@ void init_kinfam(pybind11::module &m)
     chain_ik_solver_pos_NR_JL.def(py::init<const Chain&, const JntArray&, const JntArray&, ChainFkSolverPos&,
                                   ChainIkSolverVel&, unsigned int, double>(),
                                   py::arg("chain"), py::arg("q_min"), py::arg("q_max"), py::arg("fksolver"),
-                                  py::arg("iksolver"), py::arg("maxiter")=100, py::arg("eps")=epsilon);
+                                  py::arg("iksolver"), py::arg("maxiter")=100, py::arg("eps")=epsilon,
+                                  py::keep_alive<1, 2>(), py::keep_alive<1, 5>(), py::keep_alive<1, 6>());
 
 
     // -------------------------
@@ -428,7 +430,8 @@ void init_kinfam(pybind11::module &m)
     // -------------------------
     py::class_<ChainIkSolverVel_pinv, ChainIkSolverVel> chain_ik_solver_vel_pinv(m, "ChainIkSolverVel_pinv");
     chain_ik_solver_vel_pinv.def(py::init<const Chain&, double, int>(),
-                                 py::arg("chain"), py::arg("eps")=0.00001, py::arg("maxiter")=150);
+                                 py::arg("chain"), py::arg("eps")=0.00001, py::arg("maxiter")=150,
+                                 py::keep_alive<1, 2>());
 
 
     // -------------------------
@@ -436,7 +439,8 @@ void init_kinfam(pybind11::module &m)
     // -------------------------
     py::class_<ChainIkSolverVel_wdls, ChainIkSolverVel> chain_ik_solver_vel_wdls(m, "ChainIkSolverVel_wdls");
     chain_ik_solver_vel_wdls.def(py::init<const Chain&, double, int>(),
-                                 py::arg("chain"), py::arg("eps")=0.00001, py::arg("maxiter")=150);
+                                 py::arg("chain"), py::arg("eps")=0.00001, py::arg("maxiter")=150,
+                                 py::keep_alive<1, 2>());
     chain_ik_solver_vel_wdls.def("setWeightTS", &ChainIkSolverVel_wdls::setWeightTS, py::arg("matrix"));
     chain_ik_solver_vel_wdls.def("setWeightJS", &ChainIkSolverVel_wdls::setWeightJS, py::arg("matrix"));
     chain_ik_solver_vel_wdls.def("setLambda", &ChainIkSolverVel_wdls::setLambda, py::arg("lambda"));
@@ -457,10 +461,10 @@ void init_kinfam(pybind11::module &m)
     py::class_<ChainIkSolverPos_LMA, ChainIkSolverPos> chain_ik_solver_pos_LMA(m, "ChainIkSolverPos_LMA");
     chain_ik_solver_pos_LMA.def(py::init<const Chain&, const Eigen::Matrix<double,6,1>&, double, int, double>(),
                                 py::arg("chain"), py::arg("L"), py::arg("eps")=1e-5, py::arg("maxiter")=500,
-                                py::arg("eps_joints")=1e-15);
+                                py::arg("eps_joints")=1e-15, py::keep_alive<1, 2>());
     chain_ik_solver_pos_LMA.def(py::init<const Chain&, double, int, double>(),
                                 py::arg("chain"), py::arg("eps")=1e-5, py::arg("maxiter")=500,
-                                py::arg("eps_joints")=1e-15);
+                                py::arg("eps_joints")=1e-15, py::keep_alive<1, 2>());
 
 
     // ----------------------------
@@ -468,7 +472,8 @@ void init_kinfam(pybind11::module &m)
     // ----------------------------
     py::class_<ChainIkSolverVel_pinv_nso, ChainIkSolverVel> chain_ik_solver_vel_pinv_nso(m, "ChainIkSolverVel_pinv_nso");
     chain_ik_solver_vel_pinv_nso.def(py::init<const Chain&, double, int, double>(),
-                                     py::arg("chain"), py::arg("eps")=0.00001, py::arg("maxiter")=150, py::arg("alpha")=0.25);
+                                     py::arg("chain"), py::arg("eps")=0.00001, py::arg("maxiter")=150, py::arg("alpha")=0.25,
+                                     py::keep_alive<1, 2>());
     chain_ik_solver_vel_pinv_nso.def("setWeights", &ChainIkSolverVel_pinv_nso::setWeights, py::arg("weights"));
     chain_ik_solver_vel_pinv_nso.def("setOptPos", &ChainIkSolverVel_pinv_nso::setOptPos, py::arg("opt_pos"));
     chain_ik_solver_vel_pinv_nso.def("setAlpha", &ChainIkSolverVel_pinv_nso::setAlpha, py::arg("alpha"));
@@ -481,14 +486,14 @@ void init_kinfam(pybind11::module &m)
     // ChainIkSolverVel_pinv_givens
     // -------------------------------
     py::class_<ChainIkSolverVel_pinv_givens, ChainIkSolverVel> chain_ik_solver_vel_pinv_givens(m, "ChainIkSolverVel_pinv_givens");
-    chain_ik_solver_vel_pinv_givens.def(py::init<const Chain&>(), py::arg("chain"));
+    chain_ik_solver_vel_pinv_givens.def(py::init<const Chain&>(), py::arg("chain"), py::keep_alive<1, 2>());
 
 
     // ------------------------------
     // ChainJntToJacSolver
     // ------------------------------
     py::class_<ChainJntToJacSolver, SolverI> chain_jnt_to_jac_solver(m, "ChainJntToJacSolver");
-    chain_jnt_to_jac_solver.def(py::init<const Chain&>(), py::arg("chain"));
+    chain_jnt_to_jac_solver.def(py::init<const Chain&>(), py::arg("chain"), py::keep_alive<1, 2>());
     chain_jnt_to_jac_solver.def("JntToJac", &ChainJntToJacSolver::JntToJac,
                                 py::arg("q_in"), py::arg("jac"), py::arg("seg_nr")=-1);
     chain_jnt_to_jac_solver.def("setLockedJoints", &ChainJntToJacSolver::setLockedJoints, py::arg("locked_joints"));
@@ -498,7 +503,7 @@ void init_kinfam(pybind11::module &m)
     // ChainJntToJacDotSolver
     // ------------------------------
     py::class_<ChainJntToJacDotSolver, SolverI> chain_jnt_to_jac_dot_solver(m, "ChainJntToJacDotSolver");
-    chain_jnt_to_jac_dot_solver.def(py::init<const Chain&>(), py::arg("chain"));
+    chain_jnt_to_jac_dot_solver.def(py::init<const Chain&>(), py::arg("chain"), py::keep_alive<1, 2>());
     chain_jnt_to_jac_dot_solver.def("JntToJacDot", (int (ChainJntToJacDotSolver::*)(const JntArrayVel&, Jacobian&, int)) &ChainJntToJacDotSolver::JntToJacDot,
                                     py::arg("q_in"), py::arg("jdot"), py::arg("seg_nr")=-1);
     chain_jnt_to_jac_dot_solver.def("JntToJacDot", (int (ChainJntToJacDotSolver::*)(const JntArrayVel&, Twist&, int)) &ChainJntToJacDotSolver::JntToJacDot,
@@ -532,5 +537,6 @@ void init_kinfam(pybind11::module &m)
     // ChainIdSolver_RNE
     // ------------------------------
     py::class_<ChainIdSolver_RNE, ChainIdSolver> chain_id_solver_RNE(m, "ChainIdSolver_RNE");
-    chain_id_solver_RNE.def(py::init<const Chain&, Vector>(), py::arg("chain"), py::arg("grav"));
+    chain_id_solver_RNE.def(py::init<const Chain&, Vector>(), py::arg("chain"), py::arg("grav"),
+                           py::keep_alive<1, 2>());
 }
