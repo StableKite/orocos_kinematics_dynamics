@@ -1,0 +1,25 @@
+From: Jochen Sprickerhof <git@jochen.sprickerhof.de>
+Date: Sun, 22 Apr 2018 12:05:24 +0200
+Subject: Support in tree compilation
+
+---
+ python_orocos_kdl/CMakeLists.txt | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/python_orocos_kdl/CMakeLists.txt b/python_orocos_kdl/CMakeLists.txt
+index baf8178..920078c 100644
+--- a/python_orocos_kdl/CMakeLists.txt
++++ b/python_orocos_kdl/CMakeLists.txt
+@@ -24,8 +24,10 @@ set(Python3_FIND_UNVERSIONED_NAMES FIRST)
+ 
+ project(python_orocos_kdl VERSION 1.5.2)
+ 
+-# find a matching version of orocos_kdl
+-find_package(orocos_kdl ${PROJECT_VERSION} EXACT REQUIRED)
++execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_SOURCE_DIR}/../orocos_kdl/src ${PROJECT_BINARY_DIR}/../orocos_kdl/src/kdl)
++execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_BINARY_DIR}/../orocos_kdl/src/config.h ${PROJECT_SOURCE_DIR}/../orocos_kdl/src/config.h)
++include_directories(${PROJECT_BINARY_DIR}/../orocos_kdl/src)
++include(${PROJECT_BINARY_DIR}/../orocos_kdl/orocos_kdl-config.cmake)
+ include_directories(${orocos_kdl_INCLUDE_DIRS})
+ link_directories(${orocos_kdl_LIBRARY_DIRS})
+ 

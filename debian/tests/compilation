@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -exu
+
+cd "$AUTOPKGTEST_TMP"
+
+component=$1
+shift
+
+echo "CmakeLists.txt:"
+tee CMakeLists.txt << END
+cmake_minimum_required(VERSION 3.12)
+project(autopkgtest_$component)
+find_package(catkin REQUIRED COMPONENTS $component)
+include_directories(include \${catkin_INCLUDE_DIRS})
+add_executable(main main.cc)
+target_link_libraries(main \${catkin_LIBRARIES})
+END
+
+echo "main.cc:"
+for incl in $@; do
+	echo "#include <$incl>" | tee -a main.cc
+done
+echo "int main(int argc, char* argv[]) { return 0; }" | tee -a main.cc
+
+
+mkdir build
+cmake -H. -Bbuild
+cmake --build build

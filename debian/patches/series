@@ -1,0 +1,6 @@
+0001-Added-CMakeLists-to-build-the-package.patch
+0002-Support-in-tree-compilation.patch
+0003-Don-t-install-OrocosKDLTargets.patch
+0004-Make-Python-version-variable-for-pybuild.patch
+0006-Drop-included-FindEigen3.patch
+0007-Use-GNUInstallDirs-for-paths.patch

@@ -1,0 +1,42 @@
+Source: orocos-kdl
+Section: libs
+Priority: optional
+Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
+Uploaders: Leopold Palomo-Avellaneda <leo@alaxarxa.net>, Jochen Sprickerhof <jspricke@debian.org>,
+Build-Depends: debhelper-compat (= 13), cmake, pkg-config, libeigen3-dev, python3-all-dev, dh-sequence-python3, pybind11-dev
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Homepage: https://www.orocos.org/kdl
+Vcs-Browser: https://salsa.debian.org/science-team/orocos-kdl
+Vcs-Git: https://salsa.debian.org/science-team/orocos-kdl.git
+
+Package: liborocos-kdl-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: liborocos-kdl1.5 (= ${binary:Version}), ${misc:Depends}, libeigen3-dev
+Description: Kinematics and Dynamics Library development files
+ Orocos project to supply RealTime usable kinematics and dynamics code,
+ it contains code for rigid body kinematics calculations and
+ representations for kinematic structures and their inverse and forward
+ kinematic solvers. This package contains the development files
+ of the library.
+
+Package: liborocos-kdl1.5
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Kinematics and Dynamics Library runtime
+ Orocos project to supply RealTime usable kinematics and dynamics code,
+ it contains code for rigid body kinematics calculations and
+ representations for kinematic structures and their inverse and forward
+ kinematic solvers. This package contains the library itself.
+
+Package: python3-pykdl
+Section: python
+Architecture: any
+Multi-Arch: same
+Depends: ${python3:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Description: Kinematics and Dynamics Library Python library
+ This package contains the Python bindings PyKDL for the Kinematics and
+ Dynamics Library (KDL), distributed by the Orocos Project.

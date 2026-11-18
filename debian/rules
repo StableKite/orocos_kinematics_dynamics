@@ -1,0 +1,9 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+export PYBUILD_CONFIGURE_ARGS=-DPYVER={version}
+export PYBUILD_SYSTEM=cmake
+
+%:
+	dh $@ --buildsystem=pybuild

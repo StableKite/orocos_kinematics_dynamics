@@ -1,0 +1,4 @@
+# we test jacobian.hpp and tree.hpp because they include eigen and boost
+Test-Command: ./debian/tests/compilation orocos_kdl kdl/jacobian.hpp kdl/tree.hpp
+Restrictions: allow-stderr
+Depends: liborocos-kdl-dev, g++, catkin
